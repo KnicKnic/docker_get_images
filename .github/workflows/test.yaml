@@ -1,0 +1,24 @@
+name: test
+
+on:
+  push:
+    branches: [ master ]
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "windows-latest"]
+    steps:
+    - uses: actions/checkout@v2
+
+    - shell: pwsh
+      env:
+        DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        DOCKER_HUB_ORG: ${{ secrets.DOCKER_HUB_USER }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      run: ./get.ps1
